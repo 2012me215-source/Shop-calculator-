@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Build Version: 2.0.1 - 2026-04-23 09:20
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LayoutDashboard, 
@@ -52,9 +53,9 @@ export default function App() {
     const savedData = localStorage.getItem(STORAGE_KEY);
     if (savedData) {
       const { products, transactions, customers } = JSON.parse(savedData);
-      setProducts(products);
-      setTransactions(transactions);
-      setCustomers(customers);
+      setProducts(products || []);
+      setTransactions(transactions || []);
+      setCustomers(customers || []);
     } else {
       // Seed initial data if empty
       const initialProducts: Product[] = [
@@ -77,7 +78,7 @@ export default function App() {
   // Calculations
   const stats = useMemo(() => {
     const totalSales = transactions.filter(t => t.type === 'Sale').reduce((acc, t) => acc + t.total, 0);
-    const totalCredit = transactions.filter(t => t.type === 'Sale' && t.isCredit).reduce((acc, t) => acc + (t.total - t.paidAmount), 0);
+    const totalCredit = transactions.filter(t => t.type === 'Sale' && t.isCredit).reduce((acc, t) => acc + (t.total - (t.paidAmount || 0)), 0);
     const lowStockItems = products.filter(p => p.stock < 10).length;
     const inventoryValue = products.reduce((acc, p) => acc + (p.stock * p.purchasePrice), 0);
 
@@ -114,14 +115,14 @@ export default function App() {
       const existingCustomer = customers.find(c => c.name === sale.customerName);
       if (existingCustomer) {
         setCustomers(prev => prev.map(c => 
-          c.id === existingCustomer.id ? { ...c, balance: c.balance + (sale.total - sale.paidAmount) } : c
+          c.id === existingCustomer.id ? { ...c, balance: c.balance + (sale.total - (sale.paidAmount || 0)) } : c
         ));
       } else {
         const newCustomer: Customer = {
           id: Math.random().toString(36).substr(2, 9),
           name: sale.customerName,
           phone: '',
-          balance: sale.total - sale.paidAmount
+          balance: sale.total - (sale.paidAmount || 0)
         };
         setCustomers([...customers, newCustomer]);
       }
