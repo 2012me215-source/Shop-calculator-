@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Build Version: 2.0.1 - 2026-04-23 09:20
+// Build Version: 3.0.0 (Offline Optimized) - 2026-04-28
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LayoutDashboard, 
@@ -138,7 +138,10 @@ export default function App() {
             <Package className="w-8 h-8" />
             عاطف ٹریڈرز
           </h1>
-          <p className="text-xs text-slate-400 mt-1 font-medium tracking-wider uppercase">Atif Traders Management</p>
+          <div className="flex items-center gap-1 mt-1">
+            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+            <p className="text-[10px] text-emerald-600 font-bold tracking-wider uppercase">سافٹ ویئر ایکٹیو (آف لائن)</p>
+          </div>
         </div>
         
         <nav className="flex-1 p-4 space-y-2">
